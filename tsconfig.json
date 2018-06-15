@@ -4,7 +4,6 @@
         "outDir": "./dist",
         "sourceMap": true,
         "declaration": true,
-        "allowJs": true
     },
     "exclude": ["src/**/*.spec.ts"],
     "include": ["src/**/*.ts", "src/**/*.js"]

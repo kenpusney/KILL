@@ -1,4 +1,4 @@
-type Tag = string
+export type Tag = string
 
 export interface AstNode {
     tag: Tag
@@ -32,7 +32,7 @@ export class Identifier implements Expr {
     repr: string
 }
 
-type LiteralTypes = string
+export type LiteralTypes = string
 
 export class Literal<T> implements Expr{
     tag: Tag = "literal"
@@ -40,25 +40,25 @@ export class Literal<T> implements Expr{
     value: T
 }
 
-type NumberNode = Literal<number>
+export type NumberNode = Literal<number>
 
-type StringNode = Literal<string>
+export type StringNode = Literal<string>
 
-class AccessorExpr implements Expr {
+export class AccessorExpr implements Expr {
     tag: Tag = "accessor"
     primary: Expr
     accessors: Accessor[]
 }
 
-type Accessor = Identifier | MethodCall | Literal<any>
+export type Accessor = Identifier | MethodCall | Literal<any>
 
-class MethodCall implements AstNode {
+export class MethodCall implements AstNode {
     tag: Tag = "method_call"
     name: Identifier
     args: Expr[]
 }
 
-class FunCall implements Expr {
+export class FunCall implements Expr {
     tag: Tag = "funcall"
     fun: Expr
     args: Expr[]
