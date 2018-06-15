@@ -1,0 +1,30 @@
+{
+    "name": "kill-lang",
+    "version": "0.1.0",
+    "description": "KILL Programming Language",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "repository": "https://github.com/kenpusney/kill",
+    "author": "Kimmy Leo <kenpusney@gmail.com>",
+    "license": "MIT",
+    "devDependencies": {
+        "@types/chai": "^4.1.3",
+        "@types/mocha": "^5.2.0",
+        "@types/node": "^10.3.3",
+        "@types/pegjs": "^0.10.1",
+        "@types/prettyjson": "^0.0.28",
+        "chai": "^4.1.2",
+        "ignore-styles": "^5.0.1",
+        "mocha": "^5.2.0",
+        "node-watch": "^0.5.8",
+        "pegjs": "^0.10.0",
+        "prettyjson": "^1.2.1",
+        "ts-node": "^6.0.3",
+        "typescript": "^2.8.3"
+    },
+    "scripts": {
+        "test": "./node_modules/mocha/bin/_mocha -r ts-node/register -r ignore-styles src/**/*.spec.ts",
+        "watch-grammar": "node scripts/generate_parser.js"
+    },
+    "dependencies": {}
+}
