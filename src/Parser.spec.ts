@@ -8,7 +8,7 @@ import { expect } from "chai";
 
 import {
     stmt, letb, binding, ident, num, 
-    str, funcall, accessor, method_call, optr
+    str, funcall, accessor, method_call, binexpr
 } from "./ast"
 
 const parser = new Parser();
@@ -71,7 +71,7 @@ describe("Grammar", () => {
         let result = parser.parse("a + b");
 
         expect(result).eql([
-            stmt(optr("+", ident("a"), ident("b")))
+            stmt(binexpr("+", ident("a"), ident("b")))
         ])
     })
 
@@ -80,9 +80,9 @@ describe("Grammar", () => {
 
         expect(result).eql([
             stmt(
-                optr("*", 
-                    optr("+", 
-                        optr("-", 
+                binexpr("*", 
+                    binexpr("+", 
+                        binexpr("-", 
                             accessor(ident("hello"), ident("world")), 
                             accessor(ident("hello"), ident("hello"))),
                         funcall(ident("hello"), ident("world"))),

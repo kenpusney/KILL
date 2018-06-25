@@ -134,16 +134,16 @@ export function method_call(name: Identifier, ...args: Expr[]): MethodCall {
     }
 }
 
-export class Operator implements Expr {
-    tag: string = "operator"
+export class BinExpr implements Expr {
+    tag: string = "binexpr"
     repr: string
     left: Expr
     right: Expr
 }
 
-export function optr(repr: string, left: Expr, right: Expr): Operator {
+export function binexpr(repr: string, left: Expr, right: Expr): BinExpr {
     return {
-        tag: "operator",
+        tag: "binexpr",
         repr, left, right
     }
 }

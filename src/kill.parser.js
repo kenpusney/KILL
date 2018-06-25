@@ -216,7 +216,7 @@ function peg$parse(input, options) {
               }
               return true;
           },
-      peg$c68 = function(op) {return node_operator(op.join(""))},
+      peg$c68 = function(op) {return node_binexpr(op.join(""))},
       peg$c69 = /^[_a-zA-Z\-$]/,
       peg$c70 = peg$classExpectation(["_", ["a", "z"], ["A", "Z"], "-", "$"], false, false),
       peg$c71 = function(id) {
@@ -238,17 +238,17 @@ function peg$parse(input, options) {
       peg$c80 = function(comment) {return node_comment(comment.join(""));},
       peg$c81 = function(l) {return l},
       peg$c82 = function(cond, conseq, alter) {return node_condition(cond, conseq, alter);},
-      peg$c83 = function(s, op) {
-      	if (op) return op(s);
+      peg$c83 = function(s, bin) {
+      	if (bin) return bin(s);
           return s;
       },
       peg$c84 = function(exp) { return exp },
-      peg$c85 = function(op, f, optr) {
+      peg$c85 = function(op, f, bin) {
           return function(left) {
               op.left = left;
               op.right = f
-          	if (optr) {
-                  return optr(op);
+          	if (bin) {
+                  return bin(op);
               }
               return op;
           }
@@ -1474,7 +1474,7 @@ function peg$parse(input, options) {
     if (s1 !== peg$FAILED) {
       s2 = peg$parsebnl();
       if (s2 !== peg$FAILED) {
-        s3 = peg$parseoptr();
+        s3 = peg$parsebinexpr();
         if (s3 === peg$FAILED) {
           s3 = null;
         }
@@ -1557,7 +1557,7 @@ function peg$parse(input, options) {
     return s0;
   }
 
-  function peg$parseoptr() {
+  function peg$parsebinexpr() {
     var s0, s1, s2, s3, s4, s5;
 
     s0 = peg$currPos;
@@ -1569,7 +1569,7 @@ function peg$parse(input, options) {
         if (s3 !== peg$FAILED) {
           s4 = peg$parsebnl();
           if (s4 !== peg$FAILED) {
-            s5 = peg$parseoptr();
+            s5 = peg$parsebinexpr();
             if (s5 === peg$FAILED) {
               s5 = null;
             }
@@ -2782,9 +2782,9 @@ function peg$parse(input, options) {
       }
   }
 
-  function node_operator(repr, left, right) {
+  function node_binexpr(repr, left, right) {
       return {
-          tag: "operator",
+          tag: "binexpr",
           repr: repr,
           left: left,
           right: right
@@ -2895,8 +2895,13 @@ function peg$parse(input, options) {
       }
   }
 
-  var keywords = []
-  var reserved_symbols = [":=", "->", "#", ":", "|"]
+  var keywords = [
+      "let", "in", 
+      "if", "else", "then", "end", 
+      "lambda",
+      "true", "false"
+  ];
+  var reserved_symbols = [":=", "->", "#", ":", "|"];
 
   var escape_mapping = {
       'e': "\e",
@@ -2914,10 +2919,6 @@ function peg$parse(input, options) {
       };
   }
 
-  function operator(tag) {
-      return new Token(tag, undefined, false, true);
-  }
-
   function util_concat(l, r) {
       if (r) {
           return l.concat(r)
@@ -2925,21 +2926,14 @@ function peg$parse(input, options) {
       return l;
   }
 
-  var token_if = keyword("if");
-  var token_then = keyword("then");
-  var token_else = keyword("else");
-  var token_end = keyword("end");
-  var token_let = keyword("let");
-  var token_in = keyword("in");
+  function util_leftmost(op, ex) {
+      while(op.left) {
+      	op = op.left
+      }
+      op.left = ex
+  }
+
   var token_lambda = keyword("lambda");
-  var token_funcall = keyword("funcall");
-
-  var token_true = keyword("true"),
-      token_false = keyword("false"),
-      token_quote = keyword("quote")
-
-  var Oarrow = operator("->");
-  var Oassign = operator(":=");
 
 
 

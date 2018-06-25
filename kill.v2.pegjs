@@ -55,9 +55,9 @@ function node_unit() {
     }
 }
 
-function node_operator(repr, left, right) {
+function node_binexpr(repr, left, right) {
     return {
-        tag: "operator",
+        tag: "binexpr",
         repr: repr,
         left: left,
         right: right
@@ -168,8 +168,13 @@ function node_binding(variable, expr) {
     }
 }
 
-var keywords = []
-var reserved_symbols = [":=", "->", "#", ":", "|"]
+var keywords = [
+    "let", "in", 
+    "if", "else", "then", "end", 
+    "lambda",
+    "true", "false"
+];
+var reserved_symbols = [":=", "->", "#", ":", "|"];
 
 var escape_mapping = {
     'e': "\e",
@@ -187,10 +192,6 @@ function keyword(tag) {
     };
 }
 
-function operator(tag) {
-    return new Token(tag, undefined, false, true);
-}
-
 function util_concat(l, r) {
     if (r) {
         return l.concat(r)
@@ -198,21 +199,14 @@ function util_concat(l, r) {
     return l;
 }
 
-var token_if = keyword("if");
-var token_then = keyword("then");
-var token_else = keyword("else");
-var token_end = keyword("end");
-var token_let = keyword("let");
-var token_in = keyword("in");
+function util_leftmost(op, ex) {
+    while(op.left) {
+    	op = op.left
+    }
+    op.left = ex
+}
+
 var token_lambda = keyword("lambda");
-var token_funcall = keyword("funcall");
-
-var token_true = keyword("true"),
-    token_false = keyword("false"),
-    token_quote = keyword("quote")
-
-var Oarrow = operator("->");
-var Oassign = operator(":=");
 
 }
 
@@ -273,7 +267,7 @@ operator=op:[+|<>\-*%\^\&:.?!\/\\~=]+
         }
         return true;
     }
- {return node_operator(op.join(""))}
+ {return node_binexpr(op.join(""))}
 
 id = id:[_a-zA-Z\-\$]+
   &{
@@ -313,19 +307,19 @@ if =
   symbol_if bnl cond:fexp bnl symbol_then bnl conseq:exp bnl symbol_else bnl alter:exp
   {return node_condition(cond, conseq, alter);}
 
-fexp = s:sexp bnl op:optr? {
-	if (op) return op(s);
+fexp = s:sexp bnl bin:binexpr? {
+	if (bin) return bin(s);
     return s;
 }
 
 sexp = "(" bnl exp:exp bnl ")" { return exp } / funcall / aexp
 
-optr = op:operator bnl f:sexp bnl optr:optr? {
+binexpr = op:operator bnl f:sexp bnl bin:binexpr? {
     return function(left) {
         op.left = left;
         op.right = f
-    	if (optr) {
-            return optr(op);
+    	if (bin) {
+            return bin(op);
         }
         return op;
     }
