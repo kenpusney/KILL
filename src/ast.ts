@@ -133,3 +133,17 @@ export function method_call(name: Identifier, ...args: Expr[]): MethodCall {
         args
     }
 }
+
+export class Operator implements Expr {
+    tag: string = "operator"
+    repr: string
+    left: Expr
+    right: Expr
+}
+
+export function optr(repr: string, left: Expr, right: Expr): Operator {
+    return {
+        tag: "operator",
+        repr, left, right
+    }
+}

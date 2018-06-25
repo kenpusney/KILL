@@ -313,9 +313,23 @@ if =
   symbol_if bnl cond:fexp bnl symbol_then bnl conseq:exp bnl symbol_else bnl alter:exp
   {return node_condition(cond, conseq, alter);}
 
-fexp =
-  l:aexp rs:(bnl op:operator bnl f:exp {return [op, f]})+
- / funcall /  l:aexp {return l;}
+fexp = s:sexp bnl op:optr? {
+	if (op) return op(s);
+    return s;
+}
+
+sexp = "(" bnl exp:exp bnl ")" { return exp } / funcall / aexp
+
+optr = op:operator bnl f:sexp bnl optr:optr? {
+    return function(left) {
+        op.left = left;
+        op.right = f
+    	if (optr) {
+            return optr(op);
+        }
+        return op;
+    }
+}
 
 funcall = l:aexp p:enclosed_expr { return node_funcall(l, p) }
 

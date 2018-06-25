@@ -8,7 +8,7 @@ import { expect } from "chai";
 
 import {
     stmt, letb, binding, ident, num, 
-    str, funcall, accessor, method_call
+    str, funcall, accessor, method_call, optr
 } from "./ast"
 
 const parser = new Parser();
@@ -67,8 +67,27 @@ describe("Grammar", () => {
         ])
     })
 
+    it("should parse operator", () => {
+        let result = parser.parse("a + b");
+
+        expect(result).eql([
+            stmt(optr("+", ident("a"), ident("b")))
+        ])
+    })
+
     it("should parse fexp and aexp as correct order", () => {
-        let result = parser.parse("hello#world + hello#hello + hello(world) + hello#world(hello)")
+        let result = parser.parse("hello#world - hello#hello + hello(world) * hello#world(hello)")
+
+        expect(result).eql([
+            stmt(
+                optr("*", 
+                    optr("+", 
+                        optr("-", 
+                            accessor(ident("hello"), ident("world")), 
+                            accessor(ident("hello"), ident("hello"))),
+                        funcall(ident("hello"), ident("world"))),
+                    accessor(ident("hello"), method_call(ident("world"), ident("hello")))))
+        ])
     })
 
 })
