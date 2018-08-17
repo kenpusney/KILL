@@ -2736,7 +2736,7 @@ function peg$parse(input, options) {
 
   function pair(left, right) {
       return {
-          tag: "pair",
+          tag: "Pair",
           type: "pair",
           left: left, 
           right: right
@@ -2745,14 +2745,14 @@ function peg$parse(input, options) {
 
   function node_ident(repr) {
       return {
-          tag: "id",
+          tag: "Identifier",
           repr: repr
       }
   }
 
   function node_number(val) {
       return {
-          tag: "literal",
+          tag: "Literal",
           type: "number",
           value: val
       }
@@ -2760,7 +2760,7 @@ function peg$parse(input, options) {
 
   function node_string(val) {
       return {
-          tag: "literal",
+          tag: "Literal",
           type: "string",
           value: val
       }
@@ -2768,7 +2768,7 @@ function peg$parse(input, options) {
 
   function node_boolean(val) {
       return {
-          tag: "literal",
+          tag: "Literal",
           type: "string",
           value: val
       }
@@ -2776,7 +2776,7 @@ function peg$parse(input, options) {
 
   function node_unit() {
       return {
-          tag: "literal",
+          tag: "Literal",
           type: "unit",
           value: undefined
       }
@@ -2784,7 +2784,7 @@ function peg$parse(input, options) {
 
   function node_binexpr(repr, left, right) {
       return {
-          tag: "binexpr",
+          tag: "BinExpr",
           repr: repr,
           left: left,
           right: right
@@ -2793,7 +2793,7 @@ function peg$parse(input, options) {
 
   function node_condition(condition, consequence, alternative) {
       return {
-          tag: "condition",
+          tag: "Condition",
           condition: condition,
           consequence: consequence,
           alternative: alternative
@@ -2803,7 +2803,7 @@ function peg$parse(input, options) {
 
   function node_function(name, params, body) {
       return {
-          tag: "function",
+          tag: "Function",
           name: name,
           params: params,
           body: body
@@ -2812,7 +2812,7 @@ function peg$parse(input, options) {
 
   function node_lambda(params, body) {
       return {
-          tag: "lambda",
+          tag: "Lambda",
           type: "function",
           params: params,
           body: body
@@ -2821,7 +2821,7 @@ function peg$parse(input, options) {
 
   function node_accessor(primary, accessors) {
       return {
-          tag: "accessor",
+          tag: "AccessorExpr",
           primary: primary,
           accessors: accessors
       }
@@ -2829,7 +2829,7 @@ function peg$parse(input, options) {
 
   function node_method_call(name, args) {
       return {
-          tag: "method_call",
+          tag: "MethodCall",
           name: name,
           args: args
       }
@@ -2837,7 +2837,7 @@ function peg$parse(input, options) {
 
   function node_funcall(fun, args) {
       return {
-          tag: "funcall",
+          tag: "FunCall",
           fun: fun,
           args: args
       }
@@ -2845,7 +2845,7 @@ function peg$parse(input, options) {
 
   function node_comprehension(expr, binding) {
       return {
-          tag: "comprehension",
+          tag: "Comprehension",
           expr: expr,
           binding: binding
       }
@@ -2853,14 +2853,14 @@ function peg$parse(input, options) {
 
   function node_statements(statements) {
       return {
-          tag: "statements",
+          tag: "Statements",
           statements: statements
       }
   }
 
   function node_statement(statement, comment) {
       return {
-          tag: "statement",
+          tag: "Statement",
           statement: statement,
           comment: comment
       }
@@ -2868,28 +2868,28 @@ function peg$parse(input, options) {
 
   function node_comment(comment) {
       return {
-          tag: "comment",
+          tag: "Comment",
           comment: comment
       }
   }
 
   function node_exprlist(exprs) {
       return {
-          tag: "exprlist",
+          tag: "ExprList",
           exprs: exprs
       }
   }
 
   function node_letbinding(bindings) {
       return {
-          tag: "let",
+          tag: "LetBinding",
           bindings: bindings
       }
   }
 
   function node_binding(variable, expr) {
       return {
-          tag: "binding",
+          tag: "Binding",
           variable: variable,
           expr: expr
       }

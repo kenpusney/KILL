@@ -9,7 +9,7 @@ function Token(tag, value=undefined, isKeyword = false, isOperator = false) {
 
 function pair(left, right) {
     return {
-        tag: "pair",
+        tag: "Pair",
         type: "pair",
         left: left, 
         right: right
@@ -18,14 +18,14 @@ function pair(left, right) {
 
 function node_ident(repr) {
     return {
-        tag: "id",
+        tag: "Identifier",
         repr: repr
     }
 }
 
 function node_number(val) {
     return {
-        tag: "literal",
+        tag: "Literal",
         type: "number",
         value: val
     }
@@ -33,7 +33,7 @@ function node_number(val) {
 
 function node_string(val) {
     return {
-        tag: "literal",
+        tag: "Literal",
         type: "string",
         value: val
     }
@@ -41,7 +41,7 @@ function node_string(val) {
 
 function node_boolean(val) {
     return {
-        tag: "literal",
+        tag: "Literal",
         type: "string",
         value: val
     }
@@ -49,7 +49,7 @@ function node_boolean(val) {
 
 function node_unit() {
     return {
-        tag: "literal",
+        tag: "Literal",
         type: "unit",
         value: undefined
     }
@@ -57,7 +57,7 @@ function node_unit() {
 
 function node_binexpr(repr, left, right) {
     return {
-        tag: "binexpr",
+        tag: "BinExpr",
         repr: repr,
         left: left,
         right: right
@@ -66,7 +66,7 @@ function node_binexpr(repr, left, right) {
 
 function node_condition(condition, consequence, alternative) {
     return {
-        tag: "condition",
+        tag: "Condition",
         condition: condition,
         consequence: consequence,
         alternative: alternative
@@ -76,7 +76,7 @@ function node_condition(condition, consequence, alternative) {
 
 function node_function(name, params, body) {
     return {
-        tag: "function",
+        tag: "Function",
         name: name,
         params: params,
         body: body
@@ -85,7 +85,7 @@ function node_function(name, params, body) {
 
 function node_lambda(params, body) {
     return {
-        tag: "lambda",
+        tag: "Lambda",
         type: "function",
         params: params,
         body: body
@@ -94,7 +94,7 @@ function node_lambda(params, body) {
 
 function node_accessor(primary, accessors) {
     return {
-        tag: "accessor",
+        tag: "AccessorExpr",
         primary: primary,
         accessors: accessors
     }
@@ -102,7 +102,7 @@ function node_accessor(primary, accessors) {
 
 function node_method_call(name, args) {
     return {
-        tag: "method_call",
+        tag: "MethodCall",
         name: name,
         args: args
     }
@@ -110,7 +110,7 @@ function node_method_call(name, args) {
 
 function node_funcall(fun, args) {
     return {
-        tag: "funcall",
+        tag: "FunCall",
         fun: fun,
         args: args
     }
@@ -118,7 +118,7 @@ function node_funcall(fun, args) {
 
 function node_comprehension(expr, binding) {
     return {
-        tag: "comprehension",
+        tag: "Comprehension",
         expr: expr,
         binding: binding
     }
@@ -126,14 +126,14 @@ function node_comprehension(expr, binding) {
 
 function node_statements(statements) {
     return {
-        tag: "statements",
+        tag: "Statements",
         statements: statements
     }
 }
 
 function node_statement(statement, comment) {
     return {
-        tag: "statement",
+        tag: "Statement",
         statement: statement,
         comment: comment
     }
@@ -141,28 +141,28 @@ function node_statement(statement, comment) {
 
 function node_comment(comment) {
     return {
-        tag: "comment",
+        tag: "Comment",
         comment: comment
     }
 }
 
 function node_exprlist(exprs) {
     return {
-        tag: "exprlist",
+        tag: "ExprList",
         exprs: exprs
     }
 }
 
 function node_letbinding(bindings) {
     return {
-        tag: "let",
+        tag: "LetBinding",
         bindings: bindings
     }
 }
 
 function node_binding(variable, expr) {
     return {
-        tag: "binding",
+        tag: "Binding",
         variable: variable,
         expr: expr
     }

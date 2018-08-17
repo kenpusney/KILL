@@ -89,5 +89,4 @@ describe("Grammar", () => {
                     accessor(ident("hello"), method_call(ident("world"), ident("hello")))))
         ])
     })
-
 })

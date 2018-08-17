@@ -1,3 +1,5 @@
+import { IAstVisitor } from "./visitor";
+
 export type Tag = string
 
 export interface AstNode {
@@ -5,39 +7,62 @@ export interface AstNode {
 }
 
 export class Statement implements AstNode {
-    tag: Tag = "statement"
+    tag: Tag = "Statement"
     statement: Decl | Expr
     comment: string
+
+    constructor(statement: Decl | Expr, comment: string) {
+        this.statement = statement;
+        this.comment = comment;
+    }
 }
 
 export interface Decl extends AstNode {
 }
 
-export class LetBinding {
-    tag: Tag = "let"
-    bindings: Binding[]
-}
-
 export interface Expr extends AstNode {
 }
 
+export class LetBinding implements Expr {
+    tag: Tag = "LetBinding"
+    bindings: Binding[]
+
+    constructor(bindings: Binding[]) {
+        this.bindings = bindings;
+    }
+}
+
 export class Binding implements Expr {
-    tag: Tag = "binding"
+    tag: Tag = "Binding"
     variable: Identifier
     expr: Expr
+
+    constructor(variable: Identifier, expr: Expr) {
+        this.variable = variable;
+        this.expr = expr;
+    }
 }
 
 export class Identifier implements Expr {
-    tag: Tag = "id"
+    tag: Tag = "Identifier"
     repr: string
+
+    constructor(repr: string) {
+        this.repr = repr;
+    }
 }
 
 export type LiteralTypes = string
 
 export class Literal<T> implements Expr{
-    tag: Tag = "literal"
+    tag: Tag = "Literal"
     type: LiteralTypes
     value: T
+
+    constructor(type: LiteralTypes, value: T) {
+        this.type = type;
+        this.value = value;
+    }
 }
 
 export type NumberNode = Literal<number>
@@ -45,61 +70,71 @@ export type NumberNode = Literal<number>
 export type StringNode = Literal<string>
 
 export class AccessorExpr implements Expr {
-    tag: Tag = "accessor"
+    tag: Tag = "AccessorExpr"
     primary: Expr
     accessors: Accessor[]
+
+    constructor(primary: Expr, accessors: Accessor[]) {
+        this.primary = primary;
+        this.accessors = accessors
+    }
 }
 
 export type Accessor = Identifier | MethodCall | Literal<any>
 
 export class MethodCall implements AstNode {
-    tag: Tag = "method_call"
+    tag: Tag = "MethodCall"
     name: Identifier
     args: Expr[]
+
+    constructor(name: Identifier, args: Expr[]) {
+        this.name = name;
+        this.args = args;
+    }
 }
 
 export class FunCall implements Expr {
-    tag: Tag = "funcall"
+    tag: Tag = "FunCall"
     fun: Expr
     args: Expr[]
+
+    constructor(fun: Expr, args: Expr[]) {
+        this.fun = fun;
+        this.args = args;
+    }
+}
+
+export class BinExpr implements Expr {
+    tag: string = "BinExpr"
+    repr: string
+    left: Expr
+    right: Expr
+
+    constructor(repr: string, left: Expr, right: Expr) {
+        this.repr = repr;
+        this.left = left;
+        this.right = right;
+    }
 }
 
 export function stmt(statement: Decl | Expr, comment = null): Statement {
-    return {
-        tag: "statement",
-        statement,
-        comment
-    }
+    return new Statement(statement, comment);
 }
 
 export function letb(...bindings: Binding[]): LetBinding {
-    return {
-        tag: "let",
-        bindings,
-    }
+    return new LetBinding(bindings);
 }
 
 export function binding(variable: Identifier, expr: Expr): Binding {
-    return {
-        tag: "binding",
-        variable,
-        expr
-    }
+    return new Binding(variable, expr);
 }
 
 export function ident(repr: string): Identifier {
-    return {
-        tag: "id",
-        repr,
-    }
+    return new Identifier(repr);
 }
 
 export function literal<T>(type: LiteralTypes, value: T): Literal<T> {
-    return {
-        tag: "literal",
-        type,
-        value
-    }
+    return new Literal(type, value);
 }
 
 export function num(value: number): NumberNode {
@@ -111,39 +146,17 @@ export function str(value: string): StringNode {
 }
 
 export function funcall(fun: Expr, ...args: Expr[]): FunCall {
-    return {
-        tag: "funcall",
-        fun,
-        args,
-    }
+    return new FunCall(fun, args);
 }
 
 export function accessor(primary: Expr, ...accessors: Accessor[]): AccessorExpr {
-    return {
-        tag: "accessor",
-        primary,
-        accessors
-    }
+    return new AccessorExpr(primary, accessors);
 }
 
 export function method_call(name: Identifier, ...args: Expr[]): MethodCall {
-    return {
-        tag: "method_call",
-        name,
-        args
-    }
-}
-
-export class BinExpr implements Expr {
-    tag: string = "binexpr"
-    repr: string
-    left: Expr
-    right: Expr
+    return new MethodCall(name, args);
 }
 
 export function binexpr(repr: string, left: Expr, right: Expr): BinExpr {
-    return {
-        tag: "binexpr",
-        repr, left, right
-    }
+    return new BinExpr(repr, left, right);
 }
